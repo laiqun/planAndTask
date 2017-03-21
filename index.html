@@ -1,245 +1,326 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>plan and task list</title>
-	<meta charset="UTF-8" />
-	<script type="text/javascript" src="./FileSaver.min.js"></script>
+    <title>plan and task list</title>
+    <meta charset="UTF-8"/>
+    <script type="text/javascript" src="./FileSaver.min.js"></script>
 </head>
 <body>
 <style type="text/css">
-	.plan{
-		width: 79%;
-		float: left;	
-		background: #ccc;
-	}
-	.list{
-		width: 20%;
-		float: right;
-		background: #ddd;
-	}
-	.plancontent{
-		height: 800px;
-	}
-	.listcontent{
-		height: 800px;
-	}
-	.must{
-		height: 400px;
-		background-color: #ff9900;
-	}
-	.option{
-		background-color: #4dab4d;
-		height: 400px;
-	}
-	.edit{
-		width: 100%;
-		height: 800px;
-	}
-	.footer{
-		clear: both;
-		padding-top: 20px;
-	}
-	h1{
-		margin: 0 0 ;
-	}
-	body{
-		margin: 0 0;
-	}
-	.header{
-		position: relative;
-	}
-	.userbar{
-		position: absolute;
-		right: 0;
-		top:0;
-		height: 55px;
-	}
-	.userbar li
-	{
-		float: left;
-		list-style: none;
-		margin: 0px 5px 0px 5px;
-		padding: auto;
-		line-height: 55px;
-	}
-	a{
-		color: #000;
-	}
-	.edit textarea{
-		width: 100%;
-		height:373px;
-		resize: none;
-		padding: 0 0 ;
-		border: 1px solid black;
-		margin: 0 0 ;
-		box-sizing: border-box;
-	}
-	h1,h2{
-		margin: 0;
-	}
+    .plan {
+        width: 79%;
+        float: left;
+        background: #ccc;
+    }
+
+    .list {
+        width: 20%;
+        float: right;
+        background: #ddd;
+    }
+
+    .plancontent {
+        height: 800px;
+    }
+
+    .listcontent {
+        height: 800px;
+    }
+
+    .must {
+        height: 400px;
+        background-color: #ff9900;
+    }
+
+    .option {
+        background-color: #4dab4d;
+        height: 400px;
+    }
+
+    .edit {
+        width: 100%;
+        height: 800px;
+    }
+
+    .footer {
+        clear: both;
+        padding-top: 20px;
+    }
+
+    h1 {
+        margin: 0 0;
+    }
+
+    body {
+        margin: 0 0;
+    }
+
+    .header {
+        position: relative;
+    }
+
+    .userbar {
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 55px;
+    }
+
+    .userbar li {
+        float: left;
+        list-style: none;
+        margin: 0px 5px 0px 5px;
+        padding: auto;
+        line-height: 55px;
+    }
+
+    a {
+        color: #000;
+    }
+
+    .edit textarea {
+        width: 100%;
+        height: 373px;
+        resize: none;
+        padding: 0 0;
+        border: 1px solid black;
+        margin: 0 0;
+        box-sizing: border-box;
+    }
+
+    h1, h2 {
+        margin: 0;
+    }
 </style>
 <div class="header" style="height: 55px;">
-	<img src="./grape.png" style="height: 100%;">
-	<h1 style="display: inline;"><span style="vertical-align:top; padding:17px 0px 17px 0px;line-height: 55px">时间管理小应用</span>
-	</h1>
-<div class="userbar">
-	<ul style="margin: 0">
-		<li ><a href="#" >导入</a></li>
-	    <li ><a href="#" id="exportToFile">导出</a></li>
-		<li ><a href="#">帮助</a></li>
-	</ul>
-</div>
+    <img src="./grape.png" style="height: 100%;">
+    <h1 style="display: inline;"><span
+            style="vertical-align:top; padding:17px 0px 17px 0px;line-height: 55px">时间管理小应用</span>
+    </h1>
+    <div class="userbar">
+        <ul style="margin: 0">
+            <li><a href="#">导入</a></li>
+            <li><a href="#" id="exportToFile">导出</a></li>
+            <li><a href="#">帮助</a></li>
+        </ul>
+    </div>
 </div>
 <div class="content">
-<div class="plan">
-	<h1 align="center" >计划</h1>
-	<h2 align="center" style="color: #777777;font-size: 17px;">要做成一系列动作的集合，用以完成代办事项</h2>
-	<div class="plancontent">
-		<div class="must">
-			<h2 align="center" >必须做的计划</h2>
-			<div class="edit" >
-				<textarea id="mustDoPlan"  placeholder="计划动作1 计划动作2"></textarea>
-			</div>
-		</div>
+    <div class="plan">
+        <h1 align="center">计划</h1>
+        <h2 align="center" style="color: #777777;font-size: 17px;">要做成一系列动作的集合，用以完成代办事项</h2>
+        <div class="plancontent">
+            <div class="must">
+                <h2 align="center">必须做的计划</h2>
+                <div class="edit">
+                    <textarea id="mustDoPlan" placeholder="计划动作1 计划动作2"></textarea>
+                </div>
+            </div>
 
-		<div class="option">
-			<h2 align="center" >可选做的计划</h2>
-			<div class="edit">
-				<textarea id="optionDoPlan" placeholder="计划动作1 计划动作2"></textarea>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="list">
-	<h1 align="center" >任务列表</h1>
-	<h2 align="center" style="color: #777777;font-size: 17px;"> &nbsp;</h2>
-	<div class="listcontent">
-		<div class="list-header">
-			<input id="taskinput" type="text" placeholder="添加任务" style="width: 100%;box-sizing: border-box;background: url(./si-glyph-baby.svg) no-repeat;padding: 5px 5px 5px 50px;border:none;font-size: 21px; autofocus" >
-		</div>
-		<ul class="todo-list" style="padding: 0;"></ul>
-		<div class="todo-footer" >
-			<!--<input type="checkbox" id="checkall">-->
-			<span>
+            <div class="option">
+                <h2 align="center">可选做的计划</h2>
+                <div class="edit">
+                    <textarea id="optionDoPlan" placeholder="计划动作1 计划动作2"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="list">
+        <h1 align="center">任务列表</h1>
+        <h2 align="center" style="color: #777777;font-size: 17px;"> &nbsp;</h2>
+        <div class="listcontent">
+            <div class="list-header">
+                <input id="taskinput" type="text" placeholder="添加任务"
+                       style="width: 100%;box-sizing: border-box;background: url(./si-glyph-baby.svg) no-repeat;padding: 5px 5px 5px 50px;border:none;font-size: 21px; autofocus">
+            </div>
+            <ul class="todo-list" style="padding: 0;"></ul>
+            <div class="todo-footer">
+                <!--<input type="checkbox" id="checkall">-->
+                <span>
 				<span id="taskall">0</span>
 				<span> 待办事件 </span>
 			</span>
-		<button style="float: right;" id="del" >删除选中</button>
-		</div>
-	</div>
-</div>
+                <button style="float: right;" id="del">删除选中</button>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="footer">
-<div style="float: left;">
-	<span align="right" >凡事预则立不预则废<span>
-</div>
-<div style="float: right;">
-	<span>反馈邮箱：55154717@qq.com<span>
-</div>
+    <div style="float: left;">
+	<span align="right">凡事预则立不预则废</span>
+    </div>
+    <div style="float: right;">
+	<span>反馈邮箱：55154717@qq.com</span>
+    </div>
 </div>
 
 </body>
 <script type="text/javascript">
-//导出按钮
-function createItem(option,text) {
-	var o = new Object();
-	o.option=option;
-	o.text=text;
-	return o;
-}
-var exportToFile = document.getElementById("exportToFile");
-exportToFile.addEventListener("click",function(){
-	//获得todolist中的全部条目，解析生对象数组
-	var listArray=[];
-	var list = document.getElementsByClassName("todo-list")[0];
-	var items=list.getElementsByTagName("li");
-	var i=0;
-	for( i=0;i<items.length;i++)
-	{
-        var option=items[i].firstChild.checked;
-	    var text=items[i].lastChild.innerText;
-	    var item=createItem(option,text);
-	    listArray[listArray.length]=item;
-	}
-	var mustDoPlan=document.getElementById("mustDoPlan");
-    var optionDoPlan=document.getElementById("optionDoPlan");
+    function getAllData() {
+        //获得todolist中的全部条目，解析生对象数组
+        var listArray = [];
+        var list = document.getElementsByClassName("todo-list")[0];
+        var items = list.getElementsByTagName("li");
+        var i = 0;
+        for (i = 0; i < items.length; i++) {
+            var option = items[i].firstChild.checked;
+            var text = items[i].lastChild.innerText;
+            listArray[listArray.length] = createItem(option, text);
+        }
+        var mustDoPlan = document.getElementById("mustDoPlan");
+        var optionDoPlan = document.getElementById("optionDoPlan");
 
-    var all = new Object();
-    all.mustDoPlan=mustDoPlan.value;
-    all.optionDoPlan=optionDoPlan.value;
-    all.lists=listArray;
-	var jsonAll=JSON.stringify(all);
-	var blob = new Blob([jsonAll], {type: "text/plain;charset=utf-8"});
-	saveAs(blob, "planAndTask.txt");
-},false);
-//列表事件
-var text = document.getElementById("taskinput");
-text.focus();
-var totalNumber = 0;
-text.addEventListener("keyup",function(event){
-	
-	if (event.keyCode === 13) {
-		
-		var value = event.target.value;
-		
-		if (!value) {
-			return false;
-		}
+        var all = new Object();
+        all.mustDoPlan = mustDoPlan.value;
+        all.optionDoPlan = optionDoPlan.value;
+        all.lists = listArray;
+        return all;
+    }
+    //检测页面关闭事件
+    window.onbeforeunload = function () {
+        var all = getAllData();
+        localStorage.data = JSON.stringify(all);
+    };
+    window.onload=function () {//加载已经保存的数据
+        if(typeof localStorage.data)
+        {
+            ;
+        }
+        else
+        {
+            var all=JSON.parse(localStorage.data);
+            createAll(all.mustDoPlan,all.optionDoPlan,all.lists)
+        }
+    };
+    function createOne(value,option) {
+        var list = document.getElementsByClassName("todo-list")[0];
+        var li = document.createElement("li");
+        li.style = "list-style:none;";
+        var input = document.createElement("input");
+        input.type = "checkbox";
+        if(!option) //如果选中，表示已经完成
+        {
+            span.style = "text-decoration:line-through;";
+            totalNumber--;
+        }
+            else
+        {
+            span.style = "text-decoration:none;";
+            totalNumber++;
+        }
+        var span = document.createElement("span");
+        var text = document.createTextNode(value);
+        span.appendChild(text);
+        li.appendChild(input);
+        li.appendChild(span);
+        list.appendChild(li);
 
-		var item = {
-			text:value,
-			isDone:false
-		};
-		var list = document.getElementsByClassName("todo-list")[0];
-		var li = document.createElement("li");
-		li.style="list-style:none;";
-		var input = document.createElement("input");
-		input.type="checkbox";
-		input.addEventListener("click",function(event){
-			console.dir(event);
-			if(event.target.checked)
-			{
-				var span = event.target.parentNode.getElementsByTagName("span")[0];
-				span.style="text-decoration:line-through;";
-				span="";
-				totalNumber--;
-				document.getElementById("taskall").innerHTML=totalNumber;
-			}
-			else
-			{
-				var span = event.target.parentNode.getElementsByTagName("span")[0];
-				span.style="text-decoration:none;";
-				span="";
-				totalNumber++;
-				document.getElementById("taskall").innerHTML=totalNumber;
-			}
-		},false);
-		var span = document.createElement("span");
-		span.style="text-decoration:none;";
-		var text=document.createTextNode(value);
-		span.appendChild(text);
-		li.appendChild(input);
-		li.appendChild(span);
-		list.appendChild(li);
-		value="";
-		event.target.value="";
+        document.getElementById("taskall").innerHTML = totalNumber;
 
-		totalNumber++;
-		document.getElementById("taskall").innerHTML=totalNumber;
-}
-},false);
-var delButton = document.getElementById("del");
-delButton.addEventListener("click",function(){
-	var list = document.getElementsByClassName("todo-list")[0];
-	var lis = list.getElementsByTagName("li");
-	for (var i = lis.length - 1; i >= 0; i--) {
-		if(lis[i].firstChild.checked ==true)// unselect
-		{
-			//del
-			list.removeChild(lis[i]);
-		}
-	}
-},false);
+        input.addEventListener("click", function (event) {
+            console.dir(event);
+            var span = event.target.parentNode.getElementsByTagName("span")[0];
+            if (event.target.checked) {
+                span.style = "text-decoration:line-through;";
+                span = "";
+                totalNumber--;
+                document.getElementById("taskall").innerHTML = totalNumber;
+            }
+            else {
+                span.style = "text-decoration:none;";
+                span = "";
+                totalNumber++;
+                document.getElementById("taskall").innerHTML = totalNumber;
+            }
+        }, false);
+    }
+    function createAll(must,option,lists) {
+        var mustDoPlan = document.getElementById("mustDoPlan");
+        var optionDoPlan = document.getElementById("optionDoPlan");
+        mustDoPlan.value=must;
+        optionDoPlan.value=option;
+        var i=0;
+        while(i<lists.length)
+        {
+            createOne(list[i].text,lists[i].option);
+            i++;
+        }
+    }
+    //导出按钮
+
+    function createItem(option, text) {
+        var o = new Object();
+        o.option = option;
+        o.text = text;
+        return o;
+    }
+    var exportToFile = document.getElementById("exportToFile");
+    exportToFile.addEventListener("click", function () {
+        var all = getAllData();
+        var jsonAll = JSON.stringify(all);
+        var blob = new Blob([jsonAll], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, "planAndTask.txt");
+    }, false);
+    //列表事件
+    var text = document.getElementById("taskinput");
+    text.focus();
+    var totalNumber = 0;
+    text.addEventListener("keyup", function (event) {
+
+        if (event.keyCode === 13) {
+
+            var value = event.target.value;
+
+            if (!value) {
+                return false;
+            }
+            var list = document.getElementsByClassName("todo-list")[0];
+            var li = document.createElement("li");
+            li.style = "list-style:none;";
+            var input = document.createElement("input");
+            input.type = "checkbox";
+            input.addEventListener("click", function (event) {
+                console.dir(event);
+                var span = event.target.parentNode.getElementsByTagName("span")[0];
+                if (event.target.checked) {
+                    span.style = "text-decoration:line-through;";
+                    span = "";
+                    totalNumber--;
+                    document.getElementById("taskall").innerHTML = totalNumber;
+                }
+                else {
+                    span.style = "text-decoration:none;";
+                    span = "";
+                    totalNumber++;
+                    document.getElementById("taskall").innerHTML = totalNumber;
+                }
+            }, false);
+            var span = document.createElement("span");
+            span.style = "text-decoration:none;";
+            var text = document.createTextNode(value);
+            span.appendChild(text);
+            li.appendChild(input);
+            li.appendChild(span);
+            list.appendChild(li);
+            value = "";
+            event.target.value = "";
+
+            totalNumber++;
+            document.getElementById("taskall").innerHTML = totalNumber;
+        }
+    }, false);
+    var delButton = document.getElementById("del");
+    delButton.addEventListener("click", function () {
+        var list = document.getElementsByClassName("todo-list")[0];
+        var lis = list.getElementsByTagName("li");
+        for (var i = lis.length - 1; i >= 0; i--) {
+            if (lis[i].firstChild.checked == true)// unselect
+            {
+                //del
+                list.removeChild(lis[i]);
+            }
+        }
+    }, false);
 
 
 </script>
