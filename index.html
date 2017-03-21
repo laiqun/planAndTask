@@ -3,6 +3,7 @@
 <head>
 	<title>plan and task list</title>
 	<meta charset="UTF-8" />
+	<script type="text/javascript" src="./FileSaver.min.js"></script>
 </head>
 <body>
 <style type="text/css">
@@ -36,6 +37,7 @@
 	}
 	.footer{
 		clear: both;
+		padding-top: 20px;
 	}
 	h1{
 		margin: 0 0 ;
@@ -83,9 +85,7 @@
 <div class="userbar">
 	<ul style="margin: 0">
 		<li ><a href="#" >导入</a></li>
-	    <li ><a href="#">导出</a></li>
-		<li ><a href="#">登录/注册</a></li>
-		<li ><a href="#">关于</a></li>
+	    <li ><a href="#" id="exportToFile">导出</a></li>
 		<li ><a href="#">帮助</a></li>
 	</ul>
 </div>
@@ -130,11 +130,26 @@
 </div>
 </div>
 <div class="footer">
-<h1 align="right">凡事预则立不预则废<h1>
+<div style="float: left;">
+	<span align="right" >凡事预则立不预则废<span>
+</div>
+<div style="float: right;">
+	<span>反馈邮箱：55154717@qq.com<span>
+</div>
 </div>
 
 </body>
 <script type="text/javascript">
+//导出按钮
+var exportToFile = document.getElementById("exportToFile");
+exportToFile.addEventListener("click",function(){
+	//获得todolist中的全部条目，解析生对象数组
+	var list = document.getElementsByClassName("todo-list")[0];
+	
+	var blob = new Blob(["Hello, world!"], {type: "text/plain;charset=utf-8"});
+	saveAs(blob, "hello world.txt");
+},false);
+//列表事件
 var text = document.getElementById("taskinput");
 text.focus();
 var totalNumber = 0;
