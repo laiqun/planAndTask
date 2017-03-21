@@ -97,15 +97,15 @@
 	<div class="plancontent">
 		<div class="must">
 			<h2 align="center" >必须做的计划</h2>
-			<div class="edit">
-				<textarea ></textarea>
+			<div class="edit" >
+				<textarea id="mustDoPlan"  placeholder="计划动作1 计划动作2"></textarea>
 			</div>
 		</div>
 
 		<div class="option">
 			<h2 align="center" >可选做的计划</h2>
 			<div class="edit">
-				<textarea ></textarea>
+				<textarea id="optionDoPlan" placeholder="计划动作1 计划动作2"></textarea>
 			</div>
 		</div>
 	</div>
@@ -141,13 +141,36 @@
 </body>
 <script type="text/javascript">
 //导出按钮
+function createItem(option,text) {
+	var o = new Object();
+	o.option=option;
+	o.text=text;
+	return o;
+}
 var exportToFile = document.getElementById("exportToFile");
 exportToFile.addEventListener("click",function(){
 	//获得todolist中的全部条目，解析生对象数组
+	var listArray=[];
 	var list = document.getElementsByClassName("todo-list")[0];
-	
-	var blob = new Blob(["Hello, world!"], {type: "text/plain;charset=utf-8"});
-	saveAs(blob, "hello world.txt");
+	var items=list.getElementsByTagName("li");
+	var i=0;
+	for( i=0;i<items.length;i++)
+	{
+        var option=items[i].firstChild.checked;
+	    var text=items[i].lastChild.innerText;
+	    var item=createItem(option,text);
+	    listArray[listArray.length]=item;
+	}
+	var mustDoPlan=document.getElementById("mustDoPlan");
+    var optionDoPlan=document.getElementById("optionDoPlan");
+
+    var all = new Object();
+    all.mustDoPlan=mustDoPlan.value;
+    all.optionDoPlan=optionDoPlan.value;
+    all.lists=listArray;
+	var jsonAll=JSON.stringify(all);
+	var blob = new Blob([jsonAll], {type: "text/plain;charset=utf-8"});
+	saveAs(blob, "planAndTask.txt");
 },false);
 //列表事件
 var text = document.getElementById("taskinput");
@@ -166,7 +189,7 @@ text.addEventListener("keyup",function(event){
 		var item = {
 			text:value,
 			isDone:false
-		}
+		};
 		var list = document.getElementsByClassName("todo-list")[0];
 		var li = document.createElement("li");
 		li.style="list-style:none;";
