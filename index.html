@@ -194,17 +194,20 @@
         li.style = "list-style:none;";
         var input = document.createElement("input");
         input.type = "checkbox";
+        var span = document.createElement("span");
         if(!option) //如果选中，表示已经完成
         {
             span.style = "text-decoration:line-through;";
+            input.checked=true;
             totalNumber--;
         }
             else
         {
             span.style = "text-decoration:none;";
+            input.checked=false;
             totalNumber++;
         }
-        var span = document.createElement("span");
+
         var text = document.createTextNode(value);
         span.appendChild(text);
         li.appendChild(input);
