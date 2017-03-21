@@ -182,11 +182,7 @@
         localStorage.data = JSON.stringify(all);
     };
     window.onload=function () {//加载已经保存的数据
-        if(typeof localStorage.data)
-        {
-            ;
-        }
-        else
+        if("undefined"!==typeof localStorage.data)
         {
             var all=JSON.parse(localStorage.data);
             createAll(all.mustDoPlan,all.optionDoPlan,all.lists)
