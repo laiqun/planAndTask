@@ -184,6 +184,7 @@
     window.onload=function () {//加载已经保存的数据
         if("undefined"!==typeof localStorage.data)
         {
+            window.totalNumber=0;
             var all=JSON.parse(localStorage.data);
             createAll(all.mustDoPlan,all.optionDoPlan,all.lists)
         }
@@ -199,7 +200,6 @@
         {
             span.style = "text-decoration:line-through;";
             input.checked=true;
-            totalNumber--;
         }
             else
         {
