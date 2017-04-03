@@ -4,6 +4,7 @@
     <title>plan and task list</title>
     <meta charset="UTF-8"/>
     <script type="text/javascript" src="./FileSaver.min.js"></script>
+    <script type="text/javascript" src="./vue.js"> </script>
 </head>
 <body>
 <style type="text/css">
@@ -102,6 +103,12 @@
         width: 32px;
         font-size: 1px;
     }
+    .finished{
+        text-decoration:line-through;
+    }
+    .unfinished{
+        text-decoration:none;
+    }
 </style>
 <div class="header" style="height: 55px;">
     <img src="./grape.png" style="height: 100%;">
@@ -124,14 +131,14 @@
             <div class="must">
                 <h2 align="center">必须做的计划</h2>
                 <div class="edit">
-                    <textarea id="mustDoPlan" placeholder="计划动作1 计划动作2"></textarea>
+                    <textarea id="mustDoPlan" placeholder="计划动作1 计划动作2" v-model="mustDoPlan"></textarea>
                 </div>
             </div>
 
             <div class="option">
                 <h2 align="center">可选做的计划</h2>
                 <div class="edit">
-                    <textarea id="optionDoPlan" placeholder="计划动作1 计划动作2"></textarea>
+                    <textarea id="optionDoPlan" placeholder="计划动作1 计划动作2" v-model="optionDoPlan"></textarea>
                 </div>
             </div>
         </div>
@@ -142,16 +149,18 @@
         <div class="listcontent">
             <div class="list-header">
                 <input id="taskinput" type="text" placeholder="添加任务"
-                       style="width: 100%;box-sizing: border-box;background: url(./si-glyph-baby.svg) no-repeat;padding: 5px 5px 5px 50px;border:none;font-size: 21px; autofocus">
+                      v-model="newItem" v-on:keyup.enter="addNewList" style="width: 100%;box-sizing: border-box;background: url(./si-glyph-baby.svg) no-repeat;padding: 5px 5px 5px 50px;border:none;font-size: 21px; autofocus">
             </div>
-            <ul class="todo-list" style="padding: 0;"></ul>
+            <ul class="todo-list" style="padding: 0;">
+                <li v-for="list in lists" style="list-style:none;" ><input type="checkbox" v-model="list.option" v-on:click="clickList(list)"><span v-bind:class="{finished:list.option,unfinished:!list.option}">{{list.text}}</span></li>
+            </ul>
             <div class="todo-footer">
                 <!--<input type="checkbox" id="checkall">-->
                 <span>
-				<span id="taskall">0</span>
+				<span id="taskall" >{{totalNumber}}</span>
 				<span> 待办事件 </span>
 			</span>
-                <button style="float: right;" id="del">删除选中</button>
+                <button style="float: right;" id="del" v-on:click="delSelections">删除选中</button>
             </div>
         </div>
     </div>
@@ -167,6 +176,70 @@
 
 </body>
 <script type="text/javascript">
+// vue初始化代码
+var app = new Vue({
+    el:'.content',
+    data:{
+        mustDoPlan : '',
+        optionDoPlan : '',
+        lists : [],
+        newItem:"",
+        totalNumber:0
+    },
+    methods:{
+        addNewList:function(){
+            if(!this.newItem){ //如果为空，什么都不添加
+                return false;
+            }
+            this.lists.push({
+                text:this.newItem,
+                option:false
+            });
+            this.totalNumber++;
+            this.newItem="";
+        },
+        clickList:function(list){
+            if(list.option)
+            {
+                this.totalNumber--;
+            }
+            else
+            {
+                this.totalNumber++;
+            }
+        },
+        delSelections:function(){
+            var i=0;
+            newList =[];
+            for (i=0;i<this.lists.length;i++)
+            {
+                if(this.lists[i].option===false)// 需要保留的记下来
+                {
+                    newList.push(this.lists[i]);
+                }               
+            }
+            this.lists.splice(0,this.lists.length);//删除所有，重新加入
+            for(i=0;i<newList.length;i++)
+                this.lists.push(newList[i]);
+            this.totalNumber=this.lists.length;
+        }
+        
+    }//end of methods 
+}//end of vue
+)
+    function restoreData(all)
+    {
+        window.app._data.mustDoPlan=all.mustDoPlan;
+        window.app._data.optionDoPlan=all.optionDoPlan;
+        window.app._data.newItem=all.newItem;
+        window.app._data.totalNumber=all.totalNumber;
+        (function()
+        {
+            var i=0;
+            for(i=0;i<all.lists.length;i++)
+                window.app._data.lists.push(all.lists[i]);
+        })();//立即执行函数
+    }
     //处理上传
     var inputElement = document.getElementById("upload");
     inputElement.addEventListener("change", handleFiles, false);
@@ -174,174 +247,33 @@
         if (this.files.length > 0) {//选中了文件才进行读取，否则不读
             var reader = new FileReader();
             reader.onload = function (f) {
-                window.totalNumber = 0;
                 var all = JSON.parse(f.target.result);
-                createAll(all.mustDoPlan, all.optionDoPlan, all.lists)
+                restoreData(all);
             };
             reader.readAsText(this.files[0]);
         }
     }
-    function getAllData() {
-        //获得todolist中的全部条目，解析生对象数组
-        var listArray = [];
-        var list = document.getElementsByClassName("todo-list")[0];
-        var items = list.getElementsByTagName("li");
-        var i = 0;
-        for (i = 0; i < items.length; i++) {
-            var option = items[i].firstChild.checked;
-            var text = items[i].lastChild.innerText;
-            listArray[listArray.length] = createItem(option, text);
-        }
-        var mustDoPlan = document.getElementById("mustDoPlan");
-        var optionDoPlan = document.getElementById("optionDoPlan");
-
-        var all = new Object();
-        all.mustDoPlan = mustDoPlan.value;
-        all.optionDoPlan = optionDoPlan.value;
-        all.lists = listArray;
-        return all;
-    }
     //检测页面关闭事件
     window.onbeforeunload = function () {
-        var all = getAllData();
-        localStorage.data = JSON.stringify(all);
+        localStorage.data = JSON.stringify(window.app._data);
     };
     window.onload = function () {//加载已经保存的数据
         if ("undefined" !== typeof localStorage.data) {
-            window.totalNumber = 0;
             var all = JSON.parse(localStorage.data);
-            createAll(all.mustDoPlan, all.optionDoPlan, all.lists)
+            restoreData(all);
         }
     };
-    function createOne(value, option) {
-        var list = document.getElementsByClassName("todo-list")[0];
-        var li = document.createElement("li");
-        li.style = "list-style:none;";
-        var input = document.createElement("input");
-        input.type = "checkbox";
-        var span = document.createElement("span");
-        if (option) {
-            span.style = "text-decoration:line-through;";//如果选中，表示已经完成
-            input.checked = true;
-        }
-        else {
-            span.style = "text-decoration:none;";
-            input.checked = false;
-            totalNumber++;
-        }
 
-        var text = document.createTextNode(value);
-        span.appendChild(text);
-        li.appendChild(input);
-        li.appendChild(span);
-        list.appendChild(li);
-
-        document.getElementById("taskall").innerHTML = totalNumber;
-
-        input.addEventListener("click", function (event) {
-            console.dir(event);
-            var span = event.target.parentNode.getElementsByTagName("span")[0];
-            if (event.target.checked) {
-                span.style = "text-decoration:line-through;";
-                span = "";
-                totalNumber--;
-                document.getElementById("taskall").innerHTML = totalNumber;
-            }
-            else {
-                span.style = "text-decoration:none;";
-                span = "";
-                totalNumber++;
-                document.getElementById("taskall").innerHTML = totalNumber;
-            }
-        }, false);
-    }
-    function createAll(must, option, lists) {
-        var mustDoPlan = document.getElementById("mustDoPlan");
-        var optionDoPlan = document.getElementById("optionDoPlan");
-        mustDoPlan.value = must;
-        optionDoPlan.value = option;
-        var i = 0;
-        while (i < lists.length) {
-            createOne(lists[i].text, lists[i].option);
-            i++;
-        }
-    }
     //导出按钮
-
-    function createItem(option, text) {
-        var o = new Object();
-        o.option = option;
-        o.text = text;
-        return o;
-    }
     var exportToFile = document.getElementById("exportToFile");
+
     exportToFile.addEventListener("click", function () {
-        var all = getAllData();
-        var jsonAll = JSON.stringify(all);
+        var jsonAll = JSON.stringify(window.app._data);
         var blob = new Blob([jsonAll], {type: "text/plain;charset=utf-8"});
         saveAs(blob, "planAndTask.txt");
     }, false);
-    //列表事件
+    
     var text = document.getElementById("taskinput");
     text.focus();
-    var totalNumber = 0;
-    text.addEventListener("keyup", function (event) {
-
-        if (event.keyCode === 13) {
-
-            var value = event.target.value;
-
-            if (!value) {
-                return false;
-            }
-            var list = document.getElementsByClassName("todo-list")[0];
-            var li = document.createElement("li");
-            li.style = "list-style:none;";
-            var input = document.createElement("input");
-            input.type = "checkbox";
-            input.addEventListener("click", function (event) {
-                console.dir(event);
-                var span = event.target.parentNode.getElementsByTagName("span")[0];
-                if (event.target.checked) {
-                    span.style = "text-decoration:line-through;";
-                    span = "";
-                    totalNumber--;
-                    document.getElementById("taskall").innerHTML = totalNumber;
-                }
-                else {
-                    span.style = "text-decoration:none;";
-                    span = "";
-                    totalNumber++;
-                    document.getElementById("taskall").innerHTML = totalNumber;
-                }
-            }, false);
-            var span = document.createElement("span");
-            span.style = "text-decoration:none;";
-            var text = document.createTextNode(value);
-            span.appendChild(text);
-            li.appendChild(input);
-            li.appendChild(span);
-            list.appendChild(li);
-            value = "";
-            event.target.value = "";
-
-            totalNumber++;
-            document.getElementById("taskall").innerHTML = totalNumber;
-        }
-    }, false);
-    var delButton = document.getElementById("del");
-    delButton.addEventListener("click", function () {
-        var list = document.getElementsByClassName("todo-list")[0];
-        var lis = list.getElementsByTagName("li");
-        for (var i = lis.length - 1; i >= 0; i--) {
-            if (lis[i].firstChild.checked === true)// unselect
-            {
-                //del
-                list.removeChild(lis[i]);
-            }
-        }
-    }, false);
-
-
 </script>
 </html>
